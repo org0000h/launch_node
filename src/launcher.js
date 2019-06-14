@@ -8,6 +8,7 @@ const cors =            require('@koa/cors');
 const static_cache =    require('koa-static-cache');
 const serve =           require('koa-static');
 const koa_json_mask =   require('koa-json-mask');
+const koa_compose =     require('koa-compose');
 
 const app = new Koa();
 
@@ -16,29 +17,30 @@ const app = new Koa();
 if (process.env.NODE_ENV !== 'test') {
   app.use(koa_morgan('[:date[clf]] ":method :url HTTP/:http-version" :status - :response-time ms'));
 }
-    app.use(koa_helmet())
-    .use(cors())
-    .use(static_cache('./satic_files', {maxAge: 60 * 60}))
-    .use(koa_body({jsonLimit: '1kb'})) // for ctx.request.body
-    .use(koa_json_mask()) // Allow user to restrict the keys returned
-
-
 
 // my middleware
 
 let router = new koa_router();
 
 router.post('/route',(ctx)=>{
-  ctx.body = "route";
+  ctx.body = ctx.request.body;
 })
-app.use(router.routes())
-.use(router.allowedMethods());
+
+// app.use(async function(ctx) {
+//   console.log( 'request body:',JSON.stringify( ctx.request.body,null,2));
+//  });
 
 
-app.use(async function(ctx) {
-  console.log( 'request body:',JSON.stringify( ctx.request.body,null,2));
- });
-
+ const all = koa_compose([
+  koa_helmet(),
+  cors(),
+  static_cache('./satic_files', {maxAge: 60 * 60}),
+  koa_body({jsonLimit: '1kb'}),
+  koa_json_mask(),
+  router.routes(),
+  router.allowedMethods()
+]);
+app.use(all);
  module.exports = app;
 
 
