@@ -5,7 +5,7 @@ const Config_dev = './config_dev';
 const config_server = require('../config_server');
 var config = null;
 
-if (config_server == 'dev') {
+if (config_server.db_type == 'dev') {
     console.log(`Load dataBase config ${Config_dev}...`);
     config = require(Config_dev);
 } else {
