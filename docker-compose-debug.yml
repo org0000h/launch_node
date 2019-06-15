@@ -1,0 +1,12 @@
+version: '3'
+services:
+  strawberry_koa_debug:
+    build: 
+      context: .
+      dockerfile: ./dockerfile_debug
+    ports:
+    - "443:3000"
+    - "9229:9229"
+    command:
+      npm run debug
+

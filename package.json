@@ -4,7 +4,8 @@
   "description": "strawberry in koa",
   "main": "launcher.js",
   "scripts": {
-    "test": "test"
+    "debug": "node --inspect-brk=0.0.0.0  ./src/server.js",
+    "start": "node ./src/server.js"
   },
   "repository": {
     "type": "git",

@@ -3,25 +3,25 @@ const server_config = require('./config_server');
 const app = require('./app');
 const http = require('http');
 const https = require('https');
+const fs = require('fs');
 http.globalAgent.maxSockets = server_config.maxSockets;
 
 let servers = {};
 
-//http server
+//create http server
 if(server_config.http_enable){
     servers.http_server = http.createServer(app.callback());
 }
 
-//https server
+//create https server
 if(server_config.https_enable){
-    const fs = require('fs');
     //tls key and crt
     let privateKey  = fs.readFileSync(__dirname + '/../ecc_cert/ecc.key', 'utf8');
     let certificate = fs.readFileSync(__dirname + '/../ecc_cert/ecc.crt', 'utf8');
     let credentials = {key: privateKey, cert: certificate};
     servers.https_server = https.createServer(credentials,app.callback());
 }
-// websocket 
+//create websocket server 
 if(server_config.websocket){
     const socket_io = require('socket.io');
     const webSocketService = require('./webSocketService');
@@ -31,7 +31,11 @@ if(server_config.websocket){
     let io = socket_io(servers.websocket_server);
     webSocketService(io);
     if(server_config.websocket_ssl){
-        servers.websocket_ssl_server = https.createServer();
+//create websocket server over tls        
+        let privateKey  = fs.readFileSync(__dirname + '/../ecc_cert/ecc.key', 'utf8');
+        let certificate = fs.readFileSync(__dirname + '/../ecc_cert/ecc.crt', 'utf8');
+        let credentials = {key: privateKey, cert: certificate};
+        servers.websocket_ssl_server = https.createServer(credentials);
         let io = socket_io(servers.websocket_ssl_server);
         webSocketService(io);
     }
@@ -44,29 +48,29 @@ startServer(servers);
  * Event listener for HTTP server "error" event.
  */
 function generateOnError(port){
-return  (error) => {
-    if (error.syscall !== 'listen') {
-    throw error;
-    }
-
-    var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-    case 'EACCES':
-        console.error(bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
-    case 'EADDRINUSE':
-        console.error(bind + ' is already in use');
-        process.exit(1);
-        break;
-    default:
+    return  (error) => {
+        if (error.syscall !== 'listen') {
         throw error;
+        }
+
+        var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+
+        // handle specific listen errors with friendly messages
+        switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+        }
     }
-}
 }
 function printListeningServer(server, port){
     return ()=>{
