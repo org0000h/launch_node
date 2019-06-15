@@ -1,5 +1,5 @@
 //连接服务器 默认使用websocket
-var wbsocket = io();
+var wbsocket = io('https://localhost:3001');
 
 var i = 0;
 //创建vue实例
