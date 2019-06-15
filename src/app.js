@@ -3,7 +3,6 @@ const Koa =             require('koa');
 const koa_morgan =      require('koa-morgan');
 const koa_helmet =      require('koa-helmet');
 const koa_body =        require('koa-body');
-const koa_router =      require('koa-router');
 const cors =            require('@koa/cors');
 const static_cache =    require('koa-static-cache');
 const serve =           require('koa-static');
@@ -19,25 +18,17 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // my middleware
-let router = new koa_router();
+let router_user = require('./routes/user');
 
-router.post('/route',(ctx)=>{
-  ctx.body = ctx.request.body;
-})
-
-// app.use(async function(ctx) {
-//   console.log( 'request body:',JSON.stringify( ctx.request.body,null,2));
-//  });
-
-
- const all = koa_compose([
+const all = koa_compose([
   koa_helmet(),
   cors(),
   static_cache('./satic_files', {maxAge: 60 * 60}),
   koa_body({jsonLimit: '1kb'}),
   koa_json_mask(),
-  router.routes(),
-  router.allowedMethods()
+
+  router_user.routes(),
+  router_user.allowedMethods()
 ]);
 app.use(all);
 
