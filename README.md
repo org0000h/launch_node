@@ -1,5 +1,5 @@
 # strwaberry_koa
-support 4 kind of servers:
+support 4 kinds of servers:
 - http
 - https
 - websocket
