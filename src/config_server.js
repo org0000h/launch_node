@@ -10,7 +10,9 @@ config_server = {
 
     websocket_ssl :true,
     websocket_ssl_port :3001,
-    db_enable :false,
+
+    db_enable :true,
+    db_type: 'dev',
     maxSockets :40000
 }
 

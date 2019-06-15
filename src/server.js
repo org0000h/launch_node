@@ -6,6 +6,8 @@ const https = require('https');
 const fs = require('fs');
 const socket_io = require('socket.io');
 const webSocketService = require('./webSocketService');
+const db = require('./database/db');
+require("./database/loadModels");
 http.globalAgent.maxSockets = server_config.maxSockets;
 
 let servers = {};
@@ -74,6 +76,28 @@ function printListeningServer(server, port){
       }
 }
 function startServer(servers){
+    if (server_config.db_enable) {
+        db.sync()
+        .then(()=>{
+            console.log("\r\nDatabase sync done");
+            servers_listen(servers);
+        })
+        .catch((e) => { 
+            console.log(`failed:${e}`); process.exit(0); 
+        });
+      }else{
+        servers_listen(servers);
+    }
+
+    
+}
+
+function loadTlsInfo(path_key, path_crt){
+    let privateKey  = fs.readFileSync(path_key, 'utf8');
+    let certificate = fs.readFileSync(path_crt, 'utf8');
+    return  credentials = {key: privateKey, cert: certificate};
+}
+function servers_listen(servers){
     ports_of_servers = {
         http_server:server_config.http_port,
         https_server:server_config.https_port,
@@ -84,26 +108,6 @@ function startServer(servers){
         let onError = generateOnError(ports_of_servers[server]);
         servers[server].on('error', onError);
         servers[server].on('listening',printListeningServer(server, ports_of_servers[server]));
-        if (server_config.db_enable) {
-            const db = require('../persistence/db');
-            require("../persistence/loadModels");
-            db.sync()
-            .then(()=>{
-                console.log("\r\n Database sync done");
-                servers[server].listen(ports_of_servers[server]);
-            })
-            .catch((e) => { 
-                console.log(`failed:${e}`); process.exit(0); 
-            });
-          }else{
-            servers[server].listen(ports_of_servers[server]);
-          }
+        servers[server].listen(ports_of_servers[server]);
     }
-    
-}
-
-function loadTlsInfo(path_key, path_crt){
-    let privateKey  = fs.readFileSync(path_key, 'utf8');
-    let certificate = fs.readFileSync(path_crt, 'utf8');
-    return  credentials = {key: privateKey, cert: certificate};
-}
+} 

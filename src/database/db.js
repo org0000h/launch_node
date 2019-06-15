@@ -2,10 +2,10 @@ const Sequelize = require('sequelize');
 const fs = require('fs');
 const Config_release = './config_release';
 const Config_dev = './config_dev';
-
+const config_server = require('../config_server');
 var config = null;
 
-if (process.env.NODE_ENV === 'dev') {
+if (config_server == 'dev') {
     console.log(`Load dataBase config ${Config_dev}...`);
     config = require(Config_dev);
 } else {
