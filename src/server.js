@@ -4,6 +4,8 @@ const app = require('./app');
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
+const socket_io = require('socket.io');
+const webSocketService = require('./webSocketService');
 http.globalAgent.maxSockets = server_config.maxSockets;
 
 let servers = {};
@@ -15,32 +17,26 @@ if(server_config.http_enable){
 
 //create https server
 if(server_config.https_enable){
-    //tls key and crt
-    let privateKey  = fs.readFileSync(__dirname + '/../ecc_cert/ecc.key', 'utf8');
-    let certificate = fs.readFileSync(__dirname + '/../ecc_cert/ecc.crt', 'utf8');
-    let credentials = {key: privateKey, cert: certificate};
+    let credentials = loadTlsInfo(
+        __dirname + '/../ecc_cert/ecc.key', 
+        __dirname + '/../ecc_cert/ecc.crt');
     servers.https_server = https.createServer(credentials,app.callback());
 }
 //create websocket server 
 if(server_config.websocket){
-    const socket_io = require('socket.io');
-    const webSocketService = require('./webSocketService');
-
     servers.websocket_server = http.createServer();
-
     let io = socket_io(servers.websocket_server);
     webSocketService(io);
-    if(server_config.websocket_ssl){
-//create websocket server over tls        
-        let privateKey  = fs.readFileSync(__dirname + '/../ecc_cert/ecc.key', 'utf8');
-        let certificate = fs.readFileSync(__dirname + '/../ecc_cert/ecc.crt', 'utf8');
-        let credentials = {key: privateKey, cert: certificate};
-        servers.websocket_ssl_server = https.createServer(credentials);
-        let io = socket_io(servers.websocket_ssl_server);
-        webSocketService(io);
-    }
 }
-
+//create websocket server over tls        
+if(server_config.websocket_ssl){
+    let credentials = loadTlsInfo(
+        __dirname + '/../ecc_cert/ecc.key', 
+        __dirname + '/../ecc_cert/ecc.crt');
+    servers.websocket_ssl_server = https.createServer(credentials);
+    let io = socket_io(servers.websocket_ssl_server);
+    webSocketService(io);
+}
 startServer(servers);
 
 // function define
@@ -104,4 +100,10 @@ function startServer(servers){
           }
     }
     
+}
+
+function loadTlsInfo(path_key, path_crt){
+    let privateKey  = fs.readFileSync(path_key, 'utf8');
+    let certificate = fs.readFileSync(path_crt, 'utf8');
+    return  credentials = {key: privateKey, cert: certificate};
 }

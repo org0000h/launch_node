@@ -18,17 +18,17 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // my middleware
-let router_user = require('./routes/user');
+const router_user = require('./routes/user');
 
+//load middleware
 const all = koa_compose([
-  koa_helmet(),
+  koa_helmet(),// HTTP header security
   cors(),
   static_cache('./satic_files', {maxAge: 60 * 60}),
   koa_body({jsonLimit: '1kb'}),
-  koa_json_mask(),
+  koa_json_mask(),// Allow user to restrict the keys returned
 
   router_user.routes(),
-  router_user.allowedMethods()
 ]);
 app.use(all);
 
