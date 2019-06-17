@@ -1,22 +1,22 @@
 {
-  "name": "strwaberry_koa",
+  "name": "launch_node",
   "version": "1.0.0",
-  "description": "strawberry in koa",
-  "main": "launcher.js",
+  "description": "launch  server in koa",
+  "main": "server.js",
   "scripts": {
     "debug": "node --inspect-brk=0.0.0.0  ./src/server.js",
     "start": "node ./src/server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/org0000h/strwaberry_koa.git"
+    "url": "git+https://github.com/org0000h/launch_node.git"
   },
   "author": "asia",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/org0000h/strwaberry_koa/issues"
+    "url": "https://github.com/org0000h/launch_node/issues"
   },
-  "homepage": "https://github.com/org0000h/strwaberry_koa#readme",
+  "homepage": "https://github.com/org0000h/launch_mode#readme",
   "dependencies": {
     "@koa/cors": "^2.2.3",
     "eslint": "^5.16.0",

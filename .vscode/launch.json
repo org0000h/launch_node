@@ -10,6 +10,16 @@
             "name": "Launch server",
             "program": "${workspaceFolder}/src/server.js",
             "outputCapture": "std"
-        }
+        },
+        {
+            "name": "Attach docker",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/launch_node",
+            "protocol": "inspector"
+        },
     ]
 }

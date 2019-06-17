@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./dockerfile_debug
     ports:
-    - "443:3000"
+    - "3000:443"
     - "9229:9229"
     command:
       npm run debug

@@ -1,10 +1,10 @@
 version: '3'
 services:
-  strawberry:
+  launch_node:
     build: .
     # image: strawberry0.2
     ports: #host:container
-    - "443:3000" 
+    - "3000:443" 
     - "9229:9229"
     command:
       npm start
