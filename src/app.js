@@ -22,7 +22,7 @@ const routerUser = require('./routes/user');
 const all = koaCompose([
   helmet(), // HTTP header security
   cors(),
-  staticCache('./satic_files', { maxAge: 60 * 60 }),
+  staticCache(`${__dirname}/../vue-admin-template/dist/`, { maxAge: 60 * 60 }),
   body({ jsonLimit: '1kb' }),
   jsonMask(), // Allow user to restrict the keys returned
 

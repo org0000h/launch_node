@@ -1,11 +1,9 @@
 const Sequelize = require('sequelize');
-
 const ConfigRelease = require('./config_release');
 const ConfigDev = require('./config_dev');
 const configServer = require('../config_server');
 
 let config = null;
-
 if (configServer.db_type === 'dev') {
   process.stdout.write(`Load dataBase config ${ConfigDev}...\r\n`);
   config = ConfigDev;

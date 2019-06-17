@@ -7,5 +7,4 @@ module.exports = {
     process.stdout.write(ctx.request.body);
     ctx.body = 'logout';
   },
-
 };
