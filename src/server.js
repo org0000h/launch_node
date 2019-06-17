@@ -47,7 +47,7 @@ function generateOnError(port) {
 
 function printListeningServer(server, port) {
   return () => {
-    process.stdout.write(`${server} 'is listening on port: + ${port}\r\n`);
+    process.stdout.write(`${server} is listening on port: ${port}\r\n`);
   };
 }
 function serversListen(servers) {
