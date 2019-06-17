@@ -19,7 +19,6 @@
   "homepage": "https://github.com/org0000h/launch_mode#readme",
   "dependencies": {
     "@koa/cors": "^2.2.3",
-    "eslint": "^5.16.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",
@@ -34,5 +33,8 @@
     "pg": "^7.11.0",
     "sequelize": "^5.8.9",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
   }
 }
