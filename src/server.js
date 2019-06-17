@@ -58,11 +58,11 @@ function generateOnError(port){
         // handle specific listen errors with friendly messages
         switch (error.code) {
         case 'EACCES':
-            console.error(bind + ' requires elevated privileges');
+            process.stderr.log(bind + ' requires elevated privileges');
             process.exit(1);
             break;
         case 'EADDRINUSE':
-            console.error(bind + ' is already in use');
+            process.stderr.log(bind + ' is already in use');
             process.exit(1);
             break;
         default:
@@ -72,18 +72,18 @@ function generateOnError(port){
 }
 function printListeningServer(server, port){
     return ()=>{
-        console.log(`${server} 'is listening on port: + ${port}`);
+        process.stderr.log(`${server} 'is listening on port: + ${port}`);
       }
 }
 function startServer(servers){
     if (server_config.db_enable) {
         db.sync()
         .then(()=>{
-            console.log("\r\nDatabase sync done");
+            process.stderr.log("\r\nDatabase sync done");
             servers_listen(servers);
         })
         .catch((e) => { 
-            console.log(`failed:${e}`); process.exit(0); 
+            process.stderr.log(`failed:${e}`); process.exit(0); 
         });
       }else{
         servers_listen(servers);
@@ -95,16 +95,16 @@ function startServer(servers){
 function loadTlsInfo(path_key, path_crt){
     let privateKey  = fs.readFileSync(path_key, 'utf8');
     let certificate = fs.readFileSync(path_crt, 'utf8');
-    return  credentials = {key: privateKey, cert: certificate};
+    return  {key: privateKey, cert: certificate};
 }
 function servers_listen(servers){
-    ports_of_servers = {
+    let ports_of_servers = {
         http_server:server_config.http_port,
         https_server:server_config.https_port,
         websocket_server:server_config.websocket_port,
         websocket_ssl_server:server_config.websocket_ssl_port,
     }
-    for(server in servers){
+    for(let server in servers){
         let onError = generateOnError(ports_of_servers[server]);
         servers[server].on('error', onError);
         servers[server].on('listening',printListeningServer(server, ports_of_servers[server]));
