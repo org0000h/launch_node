@@ -58,11 +58,11 @@ function generateOnError(port){
         // handle specific listen errors with friendly messages
         switch (error.code) {
         case 'EACCES':
-            process.stderr.log(bind + ' requires elevated privileges');
+            process.stderr.write(bind + ' requires elevated privileges');
             process.exit(1);
             break;
         case 'EADDRINUSE':
-            process.stderr.log(bind + ' is already in use');
+            process.stderr.write(bind + ' is already in use');
             process.exit(1);
             break;
         default:
@@ -72,18 +72,18 @@ function generateOnError(port){
 }
 function printListeningServer(server, port){
     return ()=>{
-        process.stderr.log(`${server} 'is listening on port: + ${port}`);
+        process.stdout.write(`${server} 'is listening on port: + ${port}\r\n`);
       }
 }
 function startServer(servers){
     if (server_config.db_enable) {
         db.sync()
         .then(()=>{
-            process.stderr.log("\r\nDatabase sync done");
+            process.stdout.write("\r\nDatabase sync done");
             servers_listen(servers);
         })
         .catch((e) => { 
-            process.stderr.log(`failed:${e}`); process.exit(0); 
+            process.stderr.write(`failed:${e}`); process.exit(0); 
         });
       }else{
         servers_listen(servers);
