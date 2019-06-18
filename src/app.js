@@ -6,13 +6,14 @@ const cors = require('@koa/cors');
 const staticCache = require('koa-static-cache');
 const jsonMask = require('koa-json-mask');
 const koaCompose = require('koa-compose');
+const jsonError = require('koa-json-error');
 
 const app = new Koa();
 
 // third patry middleware
 // HTTP requests logger
 if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan('[:date[clf]] ":method :url HTTP/:http-version" :status - :response-time ms'));
+  app.use(morgan('[:date[iso]] ":method :url HTTP/:http-version" :status - :response-time ms'));
 }
 
 //  my middleware
@@ -27,6 +28,7 @@ const all = koaCompose([
   jsonMask(), // Allow user to restrict the keys returned
 
   routerUser.routes(),
+  jsonError(),
 ]);
 app.use(all);
 

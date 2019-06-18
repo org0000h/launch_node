@@ -1,4 +1,4 @@
-# strwaberry_koa
+# launch_node
 - High concurrency support, you can use all cpu core to start.
 - based on nodejs+koa2.
 - jsonwebtoken Stateless authorization.
