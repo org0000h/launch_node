@@ -7,6 +7,7 @@ const staticCache = require('koa-static-cache');
 const jsonMask = require('koa-json-mask');
 const koaCompose = require('koa-compose');
 const jsonError = require('koa-json-error');
+const formatError = require('./middleware/errorHandler');
 
 const app = new Koa();
 
@@ -28,7 +29,7 @@ const all = koaCompose([
   jsonMask(), // Allow user to restrict the keys returned
 
   routerUser.routes(),
-  jsonError(),
+  jsonError(formatError),
 ]);
 app.use(all);
 

@@ -69,7 +69,7 @@ function startServer(servers) {
   if (serverConfig.db_enable) {
     db.sync()
       .then(() => {
-        process.stdout.write('\r\nDatabase sync done');
+        process.stdout.write('\r\nDatabase sync done\r\n');
         serversListen(servers);
       })
       .catch((e) => {
