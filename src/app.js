@@ -27,9 +27,9 @@ const all = koaCompose([
   staticCache(`${__dirname}/../vue-admin-template/dist/`, { maxAge: 60 * 60 }),
   body({ jsonLimit: '1kb' }),
   jsonMask(), // Allow user to restrict the keys returned
+  jsonError(formatError),
 
   routerUser.routes(),
-  jsonError(formatError),
 ]);
 app.use(all);
 
