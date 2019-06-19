@@ -1,6 +1,6 @@
 function formatError(err) {
   return {
-    status: err.status,
+    status: err.status || 500,
     message: err.message,
   };
 }

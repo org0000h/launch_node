@@ -12,10 +12,11 @@ cluster.setupMaster({
   // silent: true
 });
 
-for (let i = 0; i < numCPUs; i += 1) {
+numCPUs.array.forEach((i) => {
   process.stdout.write(`start worker${i}\r\n`);
   cluster.fork();
-}
+});
+
 // Listen for dying processes
 cluster.on('exit', (worker, code, signal) => {
   process.stderr.write(`A process(pid=${worker.process.pid}) died (${signal || code}). Restarting...\r\n`);
