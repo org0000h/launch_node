@@ -1,15 +1,13 @@
 const Sequelize = require('sequelize');
-const ConfigRelease = require('./config_release');
-const ConfigDev = require('./config_dev');
 const configServer = require('../config_server');
 
 let config = null;
 if (configServer.db_type === 'dev') {
-  process.stdout.write(`Load dataBase config ${ConfigDev}...\r\n`);
-  config = ConfigDev;
+  process.stdout.write(`Load dataBase  config_dev...\r\n`);
+  config = require('./config_dev');
 } else {
-  process.stdout.write(`Load dataBase config ${ConfigRelease}...\r\n`);
-  config = ConfigRelease;
+  process.stdout.write(`Load dataBase  config_release...\r\n`);
+  config = require('./config_release');
 }
 
 
@@ -23,5 +21,6 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     idle: 10000,
   },
   logging: config.logging,
+  timezone: '+08:00',
 });
 module.exports = sequelize;
