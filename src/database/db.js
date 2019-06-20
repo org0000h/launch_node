@@ -3,10 +3,12 @@ const configServer = require('../config_server');
 
 let config = null;
 if (configServer.db_type === 'dev') {
-  process.stdout.write(`Load dataBase  config_dev...\r\n`);
+  process.stdout.write('Load dataBase  config_dev...\r\n');
+  // eslint-disable-next-line global-require
   config = require('./config_dev');
 } else {
-  process.stdout.write(`Load dataBase  config_release...\r\n`);
+  process.stdout.write('Load dataBase  config_release...\r\n');
+  // eslint-disable-next-line global-require
   config = require('./config_release');
 }
 
