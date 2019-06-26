@@ -5,11 +5,11 @@ let config = null;
 if (configServer.db_type === 'dev') {
   process.stdout.write('Load dataBase  config_dev...\r\n');
   // eslint-disable-next-line global-require
-  config = require('./config_dev');
+  config = require('./db_dev.json');
 } else {
   process.stdout.write('Load dataBase  config_release...\r\n');
   // eslint-disable-next-line global-require
-  config = require('./config_release');
+  config = require('./db_release.json');
 }
 
 
@@ -22,7 +22,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
     acquire: 30000,
     idle: 10000,
   },
-  logging: config.logging,
-  timezone: '+08:00',
+  logging: config.logging || console.log,
+  timezone: config.timezone,
 });
 module.exports = sequelize;

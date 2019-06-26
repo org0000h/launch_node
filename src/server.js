@@ -4,7 +4,7 @@ const https = require('https');
 const fs = require('fs');
 const socketIO = require('socket.io');
 const app = require('./app');
-const serverConfig = require('./config_server');
+const serverConfig = require('./config_server.json');
 const webSocketService = require('./webSocketService');
 const db = require('./database/db');
 require('./database/loadModels');
