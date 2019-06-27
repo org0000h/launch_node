@@ -3,10 +3,11 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const socketIO = require('socket.io');
+const yaml = require('js-yaml');
 const app = require('./app');
-const serverConfig = require('./config_server.json');
 const webSocketService = require('./webSocketService');
 const db = require('./database/db');
+
 require('./database/loadModels');
 
 function loadTlsInfo(pathKey, pathCrt) {
@@ -83,6 +84,8 @@ function startServer(servers) {
 }
 
 // =======================================================
+const serverConfigFile = fs.readFileSync(`${__dirname}/config_server.yml`, 'utf8');
+const serverConfig = yaml.safeLoad(serverConfigFile);
 http.globalAgent.maxSockets = serverConfig.maxSockets;
 
 const startServers = new Map();

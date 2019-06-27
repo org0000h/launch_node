@@ -1,17 +1,21 @@
+const fs = require('fs');
+const yaml = require('js-yaml');
 const Sequelize = require('sequelize');
-const configServer = require('../config_server');
 
-let config = null;
+const configServerFile = fs.readFileSync(`${__dirname}/../config_server.yml`, 'utf8');
+const dev = fs.readFileSync(`${__dirname}/db_dev.yml`, 'utf8');
+const release = fs.readFileSync(`${__dirname}/db_release.yml`, 'utf8');
+
+let file = null;
+const configServer = yaml.safeLoad(configServerFile);
 if (configServer.db_type === 'dev') {
   process.stdout.write('Load dataBase  config_dev...\r\n');
-  // eslint-disable-next-line global-require
-  config = require('./db_dev.json');
+  file = dev;
 } else {
   process.stdout.write('Load dataBase  config_release...\r\n');
-  // eslint-disable-next-line global-require
-  config = require('./db_release.json');
+  file = release;
 }
-
+const config = yaml.safeLoad(file);
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
   host: config.host,
