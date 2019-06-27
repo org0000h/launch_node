@@ -1,8 +1,8 @@
-dialect": mysql
-database": RDB
-username": postgres
-password": google
-host": localhost
-port": 543
-logging": fals
-timezone": +08:0
+dialect: mysql
+database: RDB
+username: postgres
+password: google
+host: localhost
+port: 543
+logging: fals
+timezone: +08:0
